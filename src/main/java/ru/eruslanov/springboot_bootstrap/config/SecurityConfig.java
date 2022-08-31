@@ -15,9 +15,11 @@ import ru.eruslanov.springboot_bootstrap.service.UserService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
+    private final SuccessUserHandler successUserHandler;
 
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
         this.userService = userService;
+        this.successUserHandler = successUserHandler;
     }
 
 
@@ -25,9 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin/**").authenticated()
+                .antMatchers("/main/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/").loginProcessingUrl("/train-login").successForwardUrl("/admin")
+                .formLogin().loginPage("/").loginProcessingUrl("/train-login")
+                .successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout()
