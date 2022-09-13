@@ -1,4 +1,4 @@
-NSERT INTO roles VALUES (1, 'ROLE_USER'),
+INSERT INTO roles VALUES (1, 'ROLE_USER'),
                          (2, 'ROLE_ADMIN');
 
 INSERT INTO users VALUES (1, 33, 'Иван', 'Иванов', '{bcrypt}', 'user@mail.ru'),
